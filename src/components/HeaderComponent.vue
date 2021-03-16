@@ -1,6 +1,6 @@
 <template>
   <header>
-    <h1>Country Picker</h1>
+    <h1>Eerste Vue app</h1>
     <hr>
   </header>
 </template>

@@ -2,7 +2,8 @@
 <div class="container-fluid">
   <div id="app">
     <HeaderComponent/>
-    <VacationPicker/>
+    <button type="button" @click="toggleVacayList()" hidden>Toggle</button>
+    <VacationPicker v-if="showList"/>
   </div>
 </div>
 </template>
@@ -15,8 +16,17 @@ export default {
   name: 'App',
   components: {
     HeaderComponent,
-    VacationPicker
-
+    VacationPicker,
+  },
+  data(){
+    return{
+      showList: true
+    }
+  },
+  methods:{
+    toggleVacayList(){
+      this.showList = !this.showList;
+    }
   }
 }
 </script>
