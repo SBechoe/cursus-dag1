@@ -1,22 +1,23 @@
 <template>
-<div class="container-fluid">
-  <div id="app">
+  <div class="container-fluid">
     <HeaderComponent/>
+    <ValidateComponent msg="Het is goed" msgType="success" hidden/>
     <button type="button" @click="toggleVacayList()" hidden>Toggle</button>
     <VacationPicker v-if="showList"/>
   </div>
-</div>
 </template>
 
 <script>
 import HeaderComponent from './components/HeaderComponent.vue'
 import VacationPicker from './components/VacationPicker.vue'
+import ValidateComponent from './components/ValidateComponent.vue'
 
 export default {
   name: 'App',
   components: {
     HeaderComponent,
     VacationPicker,
+    ValidateComponent
   },
   data(){
     return{
@@ -32,12 +33,4 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>

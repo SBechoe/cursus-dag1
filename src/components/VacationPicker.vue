@@ -1,8 +1,7 @@
 <template>
   <div class="container-fluid">
     <div class="row" hidden>
-      <div class="col-6">
-        <button class="btn btn-primary" @click="toggleInfo()">Toggle Info</button>
+      <div class="col-7">
         <div class="card bg-secondary">
           <h2>{{ selectedCountry.name}}</h2>
           <h3>
@@ -10,34 +9,37 @@
             <span v-if="isExpensive" class="badge badge-danger">Expensive!</span>
             <span v-if="onSale" class="badge badge-success">Sale!</span>
           </h3>
+          <h5 v-if="selectedCountry.rating !== 0">
+            my rating:
+            <span class="badge badge-secondary badge-pill">
+              {{ selectedCountry.rating }}
+            </span>
+          </h5>
+          <h5 v-if="selectedCountry.favorite">
+            <span class="badge badge-secondary badge-pill">
+              {{ selectedCountry.favorite }}
+            </span>
+          </h5>
         </div>
         <button class="btn btn-info" @click="prevCountry()">Previous</button>
         <button class="btn btn-info" @click="nextCountry()">Next</button>
       </div>
-      <div class="col-6">
-        <h2>Selected Country</h2>
-        <ul class="list-group" :hidden="isHidden">
-          <li class="list-group-item">{{ selectedCountry.id}}</li>
-          <li class="list-group-item">{{ selectedCountry.name}}</li>
-          <li class="list-group-item">{{ selectedCountry.capital}}</li>
-          <li class="list-group-item">{{ selectedCountry.details}}</li>
-
-          <img :src="getImageUrl(selectedCountry.img)" :alt="selectedCountry.img">
-
-          <li class="list-group-item" v-if="isExpensive">
-            <span class="badge badge-danger badge-pill">Expensive!</span>
-          </li>
-          <li class="list-group-item" v-if="onSale">
-            <span class="badge badge-success badge-pill">On Sale!</span>
-          </li>
-        </ul>
+      <div class="col-5">
+        <CollapseSection>
+          <CountryDetailComponent :selectedCountry="selectedCountry"
+          @rating="onRating($event)" @favorite="onFavorite($event)"/>
+        </CollapseSection>
+      </div>
+      <hr>
+    </div>
+    <div class="row" hidden>
+      <div class="col">
         <h1>Counter for fun</h1>
         <h2>{{counter}}</h2>
         <button class="btn btn-success" @click="increase()">+1</button>
         <button class="btn btn-danger" @click="decrease()">-1</button>
         <button class="btn btn-info" @click="reset()">Reset</button>
       </div>
-      <hr>
     </div>
     <div class="row" hidden>
       <div class="col-6">
@@ -87,7 +89,7 @@
       </div>
       <hr>
     </div>
-    <div class="row">
+    <div class="row" hidden>
       <div class="col">
         <input type="text" class="form-control-md" v-model="person.firstName">
         <button type="button" @click="setName()" name="button">Set name</button>
@@ -97,6 +99,51 @@
         <hr>
       </div>
     </div>
+    <div class="row" hidden>
+      <div class="col-10">
+        <ul class="list-group">
+          <li v-for="(country,index) in data.countries"
+            :key="country.id"
+            class="list-group-item" :style="colorCountry(index)">
+              <span :id="country.id"
+                    :title="country.details">
+                  {{ country.name }}
+              </span>
+          </li>
+        </ul>
+      </div>
+      <div class="col-2">
+        <h6>Choose a price:</h6>
+        <select name="cars" v-model="selectedCost">
+          <option value="0">0</option>
+          <option value="1000">1000</option>
+          <option value="2000">2000</option>
+          <option value="3000">3000</option>
+          <option value="4000">4000</option>
+        </select>
+      </div>
+      <hr>
+    </div>
+    <div class="row" hidden>
+      <div class="col-2">
+        <button type="button" class="btn btn-lg btn-primary" @click="toggleClick()">Toggle first card</button>
+      </div>
+      <div class="col-5">
+        <div class="card" :class="{'active' : isActive}" >
+          <h1>First Card</h1>
+        </div>
+      </div>
+      <div class="col-5">
+        <div class="card" @mouseover="toggleMouse()" @mouseout="toggleMouse()" :class="{'mouse' : atMouse}">
+          <h1>Second Card</h1>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <ApiCountryComponent/>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -104,17 +151,22 @@
 import countryData from '../data/countryData';
 import mixinsData from '../data/mixins';
 import ShowPerson from '../components/ShowPerson.vue'
+import CountryDetailComponent from '../components/CountryDetailComponent.vue'
+import CollapseSection from '../shared/CollapseSection.vue'
+import ApiCountryComponent from '../components/ApiCountryComponent.vue'
 
 
   export default {
     name: 'VacationPicker',
     components:{
-      ShowPerson
+      CountryDetailComponent,
+      ShowPerson,
+      CollapseSection,
+      ApiCountryComponent
     },
     data(){
       return{
         data: countryData,
-        isHidden: false,
         counter: 0,
         selectedCountryIndex: 0,
         newCountry: '',
@@ -124,7 +176,10 @@ import ShowPerson from '../components/ShowPerson.vue'
         person: {
           firstName: ''
         },
-        personName: ''
+        personName: '',
+        selectedCost: 0,
+        isActive: false,
+        atMouse: false
       }
     },
     mixins: [mixinsData],
@@ -138,17 +193,11 @@ import ShowPerson from '../components/ShowPerson.vue'
       reset(){
         this.counter = 0;
       },
-      toggleInfo(){
-        this.isHidden = !this.isHidden;
-      },
       hideList(){
         this.isHidden = true;
       },
       selectInfo(country){
         this.selectedCountryIndex = this.data.countries.indexOf(country);
-      },
-      getImageUrl(img){
-        return require('../assets/countries/' + img);
       },
       nextCountry(){
 				this.selectedCountryIndex++;
@@ -157,9 +206,9 @@ import ShowPerson from '../components/ShowPerson.vue'
 				}
       },
       prevCountry(){
-        this.currentCountryIndex--;
-				if (this.currentCountryIndex < 0) {
-					this.currentCountryIndex = this.data.countries.length - 1;
+        this.selectedCountryIndex--;
+				if (this.selectedCountryIndex < 0) {
+					this.selectedCountryIndex = this.data.countries.length - 1;
 				}
       },
       addCountry(){
@@ -169,6 +218,25 @@ import ShowPerson from '../components/ShowPerson.vue'
       setName(){
         this.personName = this.person.firstName;
       },
+      colorCountry(index){
+        return{
+          backgroundColor:
+            this.data.countries[index].cost < this.selectedCost ?
+            'darkseagreen' : 'azure'
+        }
+      },
+      toggleClick(){
+        this.isActive = !this.isActive;
+      },
+      toggleMouse(){
+        this.atMouse = !this.atMouse;
+      },
+      onRating(rating){
+        this.data.countries[this.selectedCountryIndex].rating += rating;
+      },
+      onFavorite(favorite){
+        this.data.countries[this.selectedCountryIndex].favorite = favorite;
+      }
     },
     computed:{
       selectedCountry(){
@@ -177,14 +245,21 @@ import ShowPerson from '../components/ShowPerson.vue'
         }
       },
       isExpensive() {
-				return this.data.countries[this.selectedCountryIndex].cost > 4000;
+				return this.selectedCountry.cost > 4000;
 			},
       onSale(){
-        return this.data.countries[this.selectedCountryIndex].cost < 1000;
+        return this.selectedCountry.cost < 1000;
       }
     }
   }
 </script>
 
 <style lang="css" scoped>
+  .active{
+    background-color: darkseagreen;
+  }
+
+  .mouse{
+    background-color: red;
+  }
 </style>
