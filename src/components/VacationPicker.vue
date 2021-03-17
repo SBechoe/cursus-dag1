@@ -139,9 +139,20 @@
         </div>
       </div>
     </div>
-    <div class="row">
+    <div class="row" hidden>
       <div class="col">
         <ApiCountryComponent/>
+      </div>
+    </div>
+    <div class="row" hidden>
+      <div class="col">
+        <CounterComponent/>
+        <MessageComponent/>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <QuoteComponent/>
       </div>
     </div>
   </div>
@@ -154,6 +165,9 @@ import ShowPerson from '../components/ShowPerson.vue'
 import CountryDetailComponent from '../components/CountryDetailComponent.vue'
 import CollapseSection from '../shared/CollapseSection.vue'
 import ApiCountryComponent from '../components/ApiCountryComponent.vue'
+import CounterComponent from '../components/CounterComponent.vue'
+import MessageComponent from '../components/MessageComponent.vue'
+import QuoteComponent from '../components/QuoteComponent.vue'
 
 
   export default {
@@ -162,7 +176,10 @@ import ApiCountryComponent from '../components/ApiCountryComponent.vue'
       CountryDetailComponent,
       ShowPerson,
       CollapseSection,
-      ApiCountryComponent
+      ApiCountryComponent,
+      CounterComponent,
+      MessageComponent,
+      QuoteComponent
     },
     data(){
       return{
