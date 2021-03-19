@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div>
     <div class="row" hidden>
       <div class="col-7">
         <div class="card bg-secondary">
@@ -152,7 +152,6 @@
     </div>
     <div class="row">
       <div class="col">
-        <QuoteComponent/>
       </div>
     </div>
   </div>
@@ -167,8 +166,6 @@ import CollapseSection from '../shared/CollapseSection.vue'
 import ApiCountryComponent from '../components/ApiCountryComponent.vue'
 import CounterComponent from '../components/CounterComponent.vue'
 import MessageComponent from '../components/MessageComponent.vue'
-import QuoteComponent from '../components/QuoteComponent.vue'
-
 
   export default {
     name: 'VacationPicker',
@@ -178,8 +175,7 @@ import QuoteComponent from '../components/QuoteComponent.vue'
       CollapseSection,
       ApiCountryComponent,
       CounterComponent,
-      MessageComponent,
-      QuoteComponent
+      MessageComponent
     },
     data(){
       return{

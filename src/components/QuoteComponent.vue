@@ -1,6 +1,8 @@
 <template>
-  <div>
-    <h1>{{ quote }} - {{ author }}</h1>
+  <div class="quoteContainer">
+    <h1 class="quote text-white">
+      <span>{{ quote }}</span> - <span class="author">{{ author }}</span>
+    </h1>
   </div>
 </template>
 
@@ -27,4 +29,23 @@ export default {
 </script>
 
 <style lang="css" scoped>
+  .quoteContainer{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .quote{
+    font-weight: 200;
+    font-family: inherit;
+    font-size: 4vw;
+    width: 70vw;
+  }
+  .author{
+    font-style: italic;
+    font-weight: 200;
+    font-size: 3vw;
+  }
 </style>

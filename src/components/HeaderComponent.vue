@@ -1,13 +1,15 @@
 <template>
-  <header>
-    <h1>Eerste Vue app</h1>
-    <hr>
-  </header>
+  <NavComponent/>
 </template>
 
 <script>
+import NavComponent from '../components/NavComponent.vue'
+
 export default {
-  name: "HeaderComponent"
+  name: "HeaderComponent",
+  components:{
+    NavComponent
+  }
 }
 </script>
 
